@@ -21,14 +21,18 @@ url = 'https://www.alphavantage.co/query?'
 response = requests.get(url,stock_params)
 if response.status_code == 200:
     data = response.json()
-    print(data[1])
+    time_series = data['Time Series (Daily)']
+    #print(data['Time Series (Daily)'])
+    for key in time_series:
+        print(time_series[key])
+
 
 else:
     print("No response from server")
 
-data = r.json()
 
-print(data)
+
+
 
 ## STEP 2: Use https://newsapi.org
 # Instead of printing ("Get News"), actually get the first 3 news pieces for the COMPANY_NAME. 
