@@ -2,10 +2,13 @@ import key
 import requests
 import pprint
 import json
+from twilio.rest import Client
 STOCK = "TSLA"
 COMPANY_NAME = "Tesla Inc"
 
 STOCK_API_KEY = key.stock_api
+account_sid = key.account_sid
+auth_token = key.auth_token
 
 ## STEP 1: Use https://www.alphavantage.co
 # When STOCK price increase/decreases by 5% between yesterday and the day before yesterday then print("Get News").
@@ -40,39 +43,53 @@ change_pct = 100 - ((day2_close / day1_close) * 100)
 abs_change_pct = abs(change_pct)
 print(f'{change_pct= }')
 print(f'{abs_change_pct= }')
-if abs_change_pct >= 1:
-    print("Get News")
+
 
 ## STEP 2: Use https://newsapi.org
 # Instead of printing ("Get News"), actually get the first 3 news pieces for the COMPANY_NAME. 
+if abs_change_pct >= 1:
+    # news_params = {
+    #     'q': COMPANY_NAME,
+    #     'searchIn': 'title'
+    #     'pageSize': '3',
+    #     'sortBy':'publishedAt',
+    #     'apikey': key.news_api
+    # }
+    #
+    # news_url = "https://newsapi.org/v2/everything?"
+    #
+    # news_response = requests.get(news_url, news_params)
+    # print(news_response.json())
+    #
+    # news_articles = list(news_response.json()['articles'])
 
-# news_params = {
-#     'q': COMPANY_NAME,
-#     'pageSize': '3',
-#     'sortBy':'publishedAt',
-#     'apikey': key.news_api
-# }
-#
-# news_url = "https://newsapi.org/v2/everything?"
-#
-# news_response = requests.get(news_url, news_params)
-# print(news_response.json())
-#
-# news_articles = list(news_response.json()['articles'])
-news_response = {'status': 'ok', 'totalResults': 910, 'articles': [{'source': {'id': None, 'name': 'Motley Fool Australia'}, 'author': 'Bronwyn Allen', 'title': "Here's how the ASX 200 market sectors stacked up last week", 'description': "ASX technology shares led the market with a 3.23% increase while the ASX 200 lifted 0.98% last week. \nThe post Here's how the ASX 200 market sectors stacked up last week appeared first on The Motley Fool Australia.", 'url': 'https://www.fool.com.au/2025/01/26/heres-how-the-asx-200-market-sectors-stacked-up-last-week-4-2025/', 'urlToImage': 'https://www.fool.com.au/wp-content/uploads/2022/02/cyber-1200x675.jpg', 'publishedAt': '2025-01-25T21:00:00Z', 'content': 'Tech shares\xa0led the ASX 200 market sectors\xa0with a 3.23% uplift over the five trading days.\r\nMeanwhile, the S&amp;P/ASX 200 Index\xa0(ASX: XJO) rose 0.98% to finish at 8,408.9 points on Friday.\r\nThe worl… [+3317 chars]'}, {'source': {'id': None, 'name': 'Securityaffairs.com'}, 'author': 'Pierluigi Paganini', 'title': 'Subaru Starlink flaw allowed experts to remotely hack cars', 'description': 'Subaru Starlink flaw exposed vehicles and customer accounts in the US, Canada, and Japan to remote attacks. Popular security researcher Sam Curry and he colleague Shubham Shah discovered a vulnerability in Subaru’s Starlink connected vehicle service that expo…', 'url': 'https://securityaffairs.com/173434/security/subaru-starlink-vulnerability-remote-attacks.html', 'urlToImage': 'https://securityaffairs.com/wp-content/uploads/2025/01/image-40.png', 'publishedAt': '2025-01-25T19:26:30Z', 'content': 'Subaru Starlink flaw allowed experts to remotely hack cars\r\n\xa0|\xa0U.S. CISA adds SonicWall SMA1000 flaw to its Known Exploited Vulnerabilities catalog\r\n\xa0|\xa0J-magic malware campaign targets Juniper router… [+133845 chars]'}, {'source': {'id': 'financial-post', 'name': 'Financial Post'}, 'author': 'Bloomberg News', 'title': 'Stocks Are Jumping on Earnings Wins by the Most Since 2018', 'description': 'With uncertainty swirling around the outlook for inflation and interest rates, there’s been one dependable catalyst keeping Wall Street’s spirits lifted: Corporate America’s bottom line.', 'url': 'https://financialpost.com/pmn/business-pmn/stocks-are-jumping-on-earnings-wins-by-the-most-since-2018', 'urlToImage': 'https://smartcdn.gprod.postmedia.digital/financialpost/wp-content/uploads/2025/01/profit-revisions-for-sp-500-companies-slump-analysts-lowere.jpg', 'publishedAt': '2025-01-25T17:28:01Z', 'content': 'With uncertainty swirling around the outlook for inflation and interest rates, theres been one dependable catalyst keeping Wall Streets spirits lifted: Corporate Americas bottom line.\r\nAuthor of the … [+9570 chars]'}]}
-news_articles = list(news_response['articles'])
+    print("Get News")
+    news_response = {'status': 'ok', 'totalResults': 910, 'articles': [{'source': {'id': None, 'name': 'Motley Fool Australia'}, 'author': 'Bronwyn Allen', 'title': "Here's how the ASX 200 market sectors stacked up last week", 'description': "ASX technology shares led the market with a 3.23% increase while the ASX 200 lifted 0.98% last week. \nThe post Here's how the ASX 200 market sectors stacked up last week appeared first on The Motley Fool Australia.", 'url': 'https://www.fool.com.au/2025/01/26/heres-how-the-asx-200-market-sectors-stacked-up-last-week-4-2025/', 'urlToImage': 'https://www.fool.com.au/wp-content/uploads/2022/02/cyber-1200x675.jpg', 'publishedAt': '2025-01-25T21:00:00Z', 'content': 'Tech shares\xa0led the ASX 200 market sectors\xa0with a 3.23% uplift over the five trading days.\r\nMeanwhile, the S&amp;P/ASX 200 Index\xa0(ASX: XJO) rose 0.98% to finish at 8,408.9 points on Friday.\r\nThe worl… [+3317 chars]'}, {'source': {'id': None, 'name': 'Securityaffairs.com'}, 'author': 'Pierluigi Paganini', 'title': 'Subaru Starlink flaw allowed experts to remotely hack cars', 'description': 'Subaru Starlink flaw exposed vehicles and customer accounts in the US, Canada, and Japan to remote attacks. Popular security researcher Sam Curry and he colleague Shubham Shah discovered a vulnerability in Subaru’s Starlink connected vehicle service that expo…', 'url': 'https://securityaffairs.com/173434/security/subaru-starlink-vulnerability-remote-attacks.html', 'urlToImage': 'https://securityaffairs.com/wp-content/uploads/2025/01/image-40.png', 'publishedAt': '2025-01-25T19:26:30Z', 'content': 'Subaru Starlink flaw allowed experts to remotely hack cars\r\n\xa0|\xa0U.S. CISA adds SonicWall SMA1000 flaw to its Known Exploited Vulnerabilities catalog\r\n\xa0|\xa0J-magic malware campaign targets Juniper router… [+133845 chars]'}, {'source': {'id': 'financial-post', 'name': 'Financial Post'}, 'author': 'Bloomberg News', 'title': 'Stocks Are Jumping on Earnings Wins by the Most Since 2018', 'description': 'With uncertainty swirling around the outlook for inflation and interest rates, there’s been one dependable catalyst keeping Wall Street’s spirits lifted: Corporate America’s bottom line.', 'url': 'https://financialpost.com/pmn/business-pmn/stocks-are-jumping-on-earnings-wins-by-the-most-since-2018', 'urlToImage': 'https://smartcdn.gprod.postmedia.digital/financialpost/wp-content/uploads/2025/01/profit-revisions-for-sp-500-companies-slump-analysts-lowere.jpg', 'publishedAt': '2025-01-25T17:28:01Z', 'content': 'With uncertainty swirling around the outlook for inflation and interest rates, theres been one dependable catalyst keeping Wall Streets spirits lifted: Corporate Americas bottom line.\r\nAuthor of the … [+9570 chars]'}]}
+    news_articles = list(news_response['articles'])
+    if change_pct > 0:
+        text = f"*TSLA: 🔺{round(abs_change_pct,2)}%* \n\n"
+    elif change_pct < 0:
+        text = f"*TSLA: 🔻{round(abs_change_pct,2)}%* \n\n"
 
-for article in news_articles:
-    headline = article['title']
-    brief = article['description']
-    #print(headline)
-#pprint.pp(news_articles)
-
+    for article in news_articles:
+        headline = article['title']
+        brief = article['description']
+        # print(f'{headline= }')
+        # print(f'{brief= }')
+        text += f'*Headline*: {headline} \n*Brief*: {brief}\n\n'
+    print(text)
 
 ## STEP 3: Use https://www.twilio.com
 # Send a seperate message with the percentage change and each article's title and description to your phone number. 
+    client = Client(account_sid, auth_token)
+    #print("leng")
 
-
+    message = client.messages.create(
+        from_='whatsapp:+14155238886',
+        body=text,
+        to='whatsapp:+447860779613'
+    )
+print(message.sid)
 #Optional: Format the SMS message like this: 
 """
 TSLA: 🔺2%
