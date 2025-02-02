@@ -24,7 +24,7 @@ params = {
 }
 
 exercise_endpoint = "https://trackapi.nutritionix.com/v2/natural/exercise"
-sheety_endpoint = "https://api.sheety.co/756305167e207d2f09c69dde414c0210/myWorkouts/workouts"
+sheety_endpoint = key.sheety_endpoint
 
 
 
