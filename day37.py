@@ -1,5 +1,6 @@
 import requests
 import key
+from datetime import datetime
 
 GRAPHID = "graph2"
 
@@ -36,10 +37,21 @@ headers = {
 
 add_pixel_endpoint = f"{graph_endpoint}/{GRAPHID}"
 
+today = datetime.now()
+
+
 pixel_data = {
-    "date": "20250129",
-    "quantity": "4.03",
+    "date": today.strftime("%Y%m%d"),
+    "quantity": "8",
 }
 
-response = requests.post(url=add_pixel_endpoint, json=pixel_data, headers=headers)
+# response = requests.post(url=add_pixel_endpoint, json=pixel_data, headers=headers)
+# print(response.text)
+
+update_pixel_endpoint = f"{add_pixel_endpoint}/{today.strftime("%Y%m%d")}"
+updated_data = {
+    "quantity": "5"
+}
+
+response = requests.delete(url=update_pixel_endpoint, headers=headers)
 print(response.text)
