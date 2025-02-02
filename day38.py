@@ -35,17 +35,21 @@ sheety_endpoint = key.sheety_endpoint
 # print(response.json())
 
 sheet_params = {
-    'workout':{
-        'date': '11/1/1111',
-        'time': '22:22:22',
-        'exercise': 'walking',
-        'duration': 66,
-        'calories': 9999,
+    "workout":{
+        "date": "11/1/1111",
+        "time": "22:22:22",
+        "exercise": "walking",
+        "duration": 66,
+        "calories": 9999,
     }
 }
 
-add_row = requests.post(url=sheety_endpoint, json=sheet_params)
-response = requests.get(url=sheety_endpoint)
+sheety_header = {
+    "Authorization": key.sheety_token
+}
+
+add_row = requests.post(url=sheety_endpoint, json=sheet_params, headers=sheety_header)
+response = requests.get(url=sheety_endpoint, headers=sheety_header)
 response.raise_for_status()
 print(response.json())
 
