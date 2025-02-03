@@ -1,6 +1,6 @@
 import key
 import requests
-import datetime
+from datetime import datetime
 #https://trackapi.nutritionix.com/docs/#/
 
 GENDER = "male"
@@ -25,33 +25,34 @@ params = {
 
 exercise_endpoint = "https://trackapi.nutritionix.com/v2/natural/exercise"
 sheety_endpoint = key.sheety_endpoint
-
-
-
-
-
-# response = requests.post(exercise_endpoint, headers=headers, json=params)
-# response.raise_for_status()
-# print(response.json())
-
-sheet_params = {
-    "workout":{
-        "date": "11/1/1111",
-        "time": "22:22:22",
-        "exercise": "walking",
-        "duration": 66,
-        "calories": 9999,
-    }
-}
-
 sheety_header = {
     "Authorization": key.sheety_token
 }
 
-add_row = requests.post(url=sheety_endpoint, json=sheet_params, headers=sheety_header)
-response = requests.get(url=sheety_endpoint, headers=sheety_header)
+
+date = datetime.now().strftime("%d/%m/%Y")
+time = datetime.now().strftime("%H:%M:%S")
+
+response = requests.post(exercise_endpoint, headers=headers, json=params)
 response.raise_for_status()
 print(response.json())
+data = response.json()
+
+for exercise in data['exercises']:
+    sheet_params = {
+        "workout": {
+            "date": date,
+            "time": time,
+            "exercise": exercise['name'],
+            "duration": exercise['duration_min'],
+            "calories": exercise['nf_calories'],
+        }
+    }
+
+    add_row = requests.post(url=sheety_endpoint, json=sheet_params, headers=sheety_header)
+    #response = requests.get(url=sheety_endpoint, headers=sheety_header)
+    #response.raise_for_status()
+    #print(response.json())
 
 
 
