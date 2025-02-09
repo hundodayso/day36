@@ -3,8 +3,10 @@
 import key
 import requests
 import json
+from pprint import pprint
+from data_manager import DataManager
 
-
+dm = DataManager()
 auth_url = "https://test.api.amadeus.com/v1/security/oauth2/token"
 
 auth_params = {
@@ -19,23 +21,28 @@ auth_response_token = auth_response.json()['access_token']
 print(auth_response_token)
 
 
-base_url = 'https://test.api.amadeus.com/v2/shopping/flight-offers'
+def get_flight_data():
 
-params = {"adults": 1,
-          "departureDate": "2025-02-24",
-          "destinationLocationCode": "LHR",
-          "originLocationCode": "MIA",
-          "nonStop": "true"
+    base_url = 'https://test.api.amadeus.com/v2/shopping/flight-offers'
 
-         }
+    params = {"adults": 1,
+              "departureDate": "2025-02-24",
+              "destinationLocationCode": "LHR",
+              "originLocationCode": "MIA",
+              "nonStop": "true"
 
-header = {
-    "Authorization": f"Bearer {auth_response_token}"
-}
+             }
 
-flights = requests.get(base_url, headers=header, params=params)
-flight_json = flights.json()
-print(type(flight_json))
-#use this to be able to view the json in a json viewer.
-j = json.dumps(flight_json)
-print(j)
+    header = {
+        "Authorization": f"Bearer {auth_response_token}"
+    }
+
+    flights = requests.get(base_url, headers=header, params=params)
+    flight_json = flights.json()
+    print(type(flight_json))
+    #use this to be able to view the json in a json viewer.
+    j = json.dumps(flight_json)
+    print(j)
+
+data = dm.get_all_data()
+pprint(data)
