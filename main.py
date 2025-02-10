@@ -5,8 +5,10 @@ import requests
 import json
 from pprint import pprint
 from data_manager import DataManager
+from flight_search import FlightSearch
 
 dm = DataManager()
+fs = FlightSearch
 auth_url = "https://test.api.amadeus.com/v1/security/oauth2/token"
 
 auth_params = {
@@ -44,5 +46,13 @@ def get_flight_data():
     j = json.dumps(flight_json)
     print(j)
 
-data = dm.get_all_data()
-pprint(data)
+sheet_data = dm.get_all_data()
+#pprint(sheet_data)
+
+for key in sheet_data:
+    if key['iataCode']:
+        key['iataCode'] = fs.get_destination_code(
+        print(key['iataCode'])
+
+
+
