@@ -47,12 +47,9 @@ def get_flight_data():
     print(j)
 
 sheet_data = dm.get_all_data()
-#pprint(sheet_data)
+pprint(sheet_data)
 
-for key in sheet_data:
-    if key['iataCode']:
-        key['iataCode'] = fs.get_destination_code(
-        print(key['iataCode'])
+
 
 
 
