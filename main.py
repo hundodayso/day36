@@ -6,6 +6,7 @@ import json
 from pprint import pprint
 from data_manager import DataManager
 from flight_search import FlightSearch
+SHEETY_PRICES_ENDPOINT = key.sheet_data_ep
 
 dm = DataManager()
 fs = FlightSearch
@@ -46,8 +47,38 @@ def get_flight_data():
     j = json.dumps(flight_json)
     print(j)
 
+#sheet_data = [{'city': 'Paris', 'iataCode': '', 'id': 2, 'lowestPrice': 54},
+ # {'city': 'Frankfurt', 'iataCode': '', 'id': 3, 'lowestPrice': 42},
+ # {'city': 'Tokyo', 'iataCode': '', 'id': 4, 'lowestPrice': 485},
+ # {'city': 'Hong Kong', 'iataCode': '', 'id': 5, 'lowestPrice': 551},
+ # {'city': 'Istanbul', 'iataCode': '', 'id': 6, 'lowestPrice': 95},
+ # {'city': 'Kuala Lumpur', 'iataCode': '', 'id': 7, 'lowestPrice': 414},
+ # {'city': 'New York', 'iataCode': '', 'id': 8, 'lowestPrice': 240},
+ # {'city': 'San Francisco', 'iataCode': '', 'id': 9, 'lowestPrice': 260},
+ # {'city': 'Dublin', 'iataCode': '', 'id': 10, 'lowestPrice': 378},
+ # {'city': 'Turin', 'iataCode': '', 'id': 11, 'lowestPrice': 80}]
 sheet_data = dm.get_all_data()
 pprint(sheet_data)
+dm.update_destination_codes()
+
+
+
+####Trying
+# sheety_header = {
+#     "Authorization": key.sheety_token
+# }
+
+# for city in sheet_data:
+#     id = city['id']
+#     print(id)
+#     sheet_update_ep = f"{SHEETY_PRICES_ENDPOINT}/{id}"
+#     new_data = {
+#         "price":{
+#             "iataCode": "TESTING"
+#         }
+#     }
+#     response = requests.put(url=sheet_update_ep, headers=sheety_header, json=new_data)
+#     print(response)
 
 
 
