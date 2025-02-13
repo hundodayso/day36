@@ -26,16 +26,13 @@ class DataManager:
             "Authorization": key.sheety_token
         }
         for city in self.destination_data:
-            id = city['id']
-            print(id)
-            sheety_update_field_ep = f"{SHEETY_PRICES_ENDPOINT}/{id}"
             new_data = {
                 "price": {
-                    "iataCode": "TESTING"
+                    "iataCode": city["iataCode"]
                 }
             }
-            response = requests.put(url=sheety_update_field_ep, headers=sheety_header, json=new_data)
-            print(response)
+            response = requests.put(url=f"{SHEETY_PRICES_ENDPOINT}/{city["id"]}", headers=sheety_header, json=new_data)
+            print(response.text)
 
 
 
