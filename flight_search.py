@@ -13,12 +13,20 @@ class FlightSearch:
         code = "TESTING"
         url = "https://test.api.amadeus.com/v1/reference-data/locations/cities"
         params = {
-            "keyword": f"{city_name}"
+            "keyword": f"{city_name}",
+            "include": "AIRPORTS"
         }
+
+        header = {
+            "Authorization": f"Bearer {self._token}"
+        }
+
+        response = requests.get(url=url, headers=header, json=params)
+        print(response.json)
         return code
 
     def _get_new_token(self):
-        auth_url = "https://test.api.amadeus.com/v1/security/oauth2/token"
+        TOKEN_ENDPOINT = "https://test.api.amadeus.com/v1/security/oauth2/token"
 
         auth_params = {
             "grant_type": "client_credentials",
@@ -26,15 +34,17 @@ class FlightSearch:
             "client_secret": self.client_secret,
         }
 
-        auth_response = requests.post(auth_url, data=auth_params)
+        auth_response = requests.post(url=TOKEN_ENDPOINT, data=auth_params)
         self.auth_response_token = auth_response.json()['access_token']
         return self.auth_response_token
-    def get_flight_data_offers(self):
+    def get_flight_data_offers(self, departure_city_code, destination_city_code, from_date, to_date):
         base_url = 'https://test.api.amadeus.com/v2/shopping/flight-offers'
         params = {"adults": 1,
-                  "departureDate": "2025-02-24",
-                  "destinationLocationCode": "LHR",
-                  "originLocationCode": "MIA",
+                  "departureDate": from_date,
+                  "returnDate": to_date,
+                  "destinationLocationCode": destination_city_code,
+                  "originLocationCode": departure_city_code,
+                  "currencyCode": "GBP",
                   "nonStop": "true"
 
                   }
