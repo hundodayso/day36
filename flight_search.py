@@ -1,6 +1,7 @@
 import requests
 import key
 import json
+import time
 class FlightSearch:
     #This class is responsible for talking to the Flight Search API.
     def __init__(self):
@@ -37,17 +38,17 @@ class FlightSearch:
         auth_response = requests.post(url=TOKEN_ENDPOINT, data=auth_params)
         self.auth_response_token = auth_response.json()['access_token']
         return self.auth_response_token
-    def get_flight_data_offers(self, departure_city_code, destination_city_code, from_date, to_date):
+    def check_flights(self, departure_city_code, destination_city_code, from_date, to_date):
         base_url = 'https://test.api.amadeus.com/v2/shopping/flight-offers'
         params = {"adults": 1,
-                  "departureDate": from_date,
-                  "returnDate": to_date,
+                  "departureDate": from_date.strftime("%Y-%m-%d"),
+                  "returnDate": to_date.strftime("%Y-%m-%d"),
                   "destinationLocationCode": destination_city_code,
                   "originLocationCode": departure_city_code,
                   "currencyCode": "GBP",
                   "nonStop": "true"
-
                   }
+
         header = {
             "Authorization": f"Bearer {self._token}"
         }
@@ -58,3 +59,4 @@ class FlightSearch:
         # use this to be able to view the json in a json viewer.
         j = json.dumps(flight_json)
         print(j)
+        return flight_json
