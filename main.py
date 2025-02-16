@@ -2959,7 +2959,7 @@ for destination in sheet_data:
     flights = fs.check_flights(ORIGIN_CITY, destination["iataCode"], from_date=tomorrow, to_date=return_date)
     pprint(flights)
     time.sleep(5)
-
+#new_data["data"][0]["price"]["total"]
 
 
 
