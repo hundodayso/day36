@@ -2961,7 +2961,14 @@ for destination in sheet_data:
     time.sleep(5)
 #new_data["data"][0]["price"]["total"]
 
-
-
+for flight in flights:
+    price = flight["price"]["total"]
+    print(f"{price:}")
+    departure_airport = flight["itineraries"][0]["segments"][0]["departure"]["iataCode"]
+    print(f"{departure_airport:}")
+    arrival_airport = flight["itineraries"][0]["segments"][0]["arrival"]["iataCode"]
+    print(f"{arrival_airport:}")
+    carrier = flight["itineraries"][0]["segments"][0]["carrierCode"]
+    print(f"{carrier:}")
 
 
