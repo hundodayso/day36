@@ -8,11 +8,13 @@ from datetime import datetime, timedelta
 from pprint import pprint
 from data_manager import DataManager
 from flight_search import FlightSearch
+from flight_data import FlightData
 SHEETY_PRICES_ENDPOINT = key.sheet_data_ep
 ORIGIN_CITY = "LON"
 
 dm = DataManager()
 fs = FlightSearch()
+fd = FlightData()
 # auth_url = "https://test.api.amadeus.com/v1/security/oauth2/token"
 #
 # auth_params = {
@@ -2957,6 +2959,7 @@ print(return_date)
 for destination in sheet_data:
     print(f"City: {destination["city"]}...")
     flights = fs.check_flights(ORIGIN_CITY, destination["iataCode"], from_date=tomorrow, to_date=return_date)
+
     pprint(flights)
     time.sleep(5)
 #new_data["data"][0]["price"]["total"]
