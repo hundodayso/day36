@@ -9,24 +9,13 @@ from pprint import pprint
 from data_manager import DataManager
 from flight_search import FlightSearch
 from flight_data import FlightData
+from flight_data import find_cheapest_flight
 SHEETY_PRICES_ENDPOINT = key.sheet_data_ep
 ORIGIN_CITY = "LON"
 
 dm = DataManager()
 fs = FlightSearch()
-fd = FlightData()
-# auth_url = "https://test.api.amadeus.com/v1/security/oauth2/token"
-#
-# auth_params = {
-#                 "grant_type":"client_credentials",
-#                 "client_id": key.ama_client_id,
-#                 "client_secret": key.ama_client_secret,
-#                 }
-#
-# auth_response = requests.post(auth_url, data=auth_params)
-#
-# auth_response_token = auth_response.json()['access_token']
-# print(auth_response_token)
+
 
 
 flights_output = r'''{
@@ -2940,7 +2929,7 @@ flights_output = r'''{
  # {'city': 'Turin', 'iataCode': '', 'id': 11, 'lowestPrice': 80}]
 sheet_data = dm.get_all_data()
 pprint(sheet_data)
-#
+
 for row in sheet_data:
     if row["iataCode"] == "":
         row["iataCode"] = fs.get_destination_code(row["city"])
@@ -2953,25 +2942,18 @@ dm.update_destination_codes()
 
 tomorrow = datetime.now() + timedelta(days=1)
 print(tomorrow)
-
 return_date = tomorrow + timedelta(days=(6*30))
 print(return_date)
-for destination in sheet_data:
-    print(f"City: {destination["city"]}...")
-    flights = fs.check_flights(ORIGIN_CITY, destination["iataCode"], from_date=tomorrow, to_date=return_date)
 
-    pprint(flights)
+for destination in sheet_data:
+    print(f"getting flights for: {destination["city"]}...")
+    flights = fs.check_flights(ORIGIN_CITY, destination["iataCode"], from_date=tomorrow, to_date=return_date)
+    cheapest_flight = find_cheapest_flight(flights)
+    #print(cheapest_flight)
+    #pprint(flights)
     time.sleep(5)
 #new_data["data"][0]["price"]["total"]
 
-for flight in flights:
-    price = flight["price"]["total"]
-    print(f"{price:}")
-    departure_airport = flight["itineraries"][0]["segments"][0]["departure"]["iataCode"]
-    print(f"{departure_airport:}")
-    arrival_airport = flight["itineraries"][0]["segments"][0]["arrival"]["iataCode"]
-    print(f"{arrival_airport:}")
-    carrier = flight["itineraries"][0]["segments"][0]["carrierCode"]
-    print(f"{carrier:}")
+
 
 

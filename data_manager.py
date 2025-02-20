@@ -18,6 +18,7 @@ class DataManager:
         }
         response = requests.get(url=SHEETY_PRICES_ENDPOINT, headers=sheety_header)
         data = response.json()
+        print(data)
         self.destination_data = data["prices"]
         return self.destination_data
 
